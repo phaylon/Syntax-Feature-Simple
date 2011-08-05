@@ -1,0 +1,8 @@
+
+Candidates for inclusion or for enhanced syntax extensions:
+
+  - no indirect;
+  - use true;
+  - try { ... } catch ($xe { ... } for Try::Tiny
+  - role { ... } and role ($param) { ... }
+  - Smart::Match if we can detect what version was declared
