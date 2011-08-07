@@ -1,0 +1,48 @@
+=pod
+
+=head1 NAME
+
+Syntax::Feature::Simple - DWIM syntax extensions
+
+=head1 VERSION
+
+version 0.001
+
+=head1 DESCRIPTION
+
+This is a more of a syntax extension package than a simple extension by
+itself. It will detect what kind of package it is imported into, and setup
+appropriate syntax extensions depending on the type.
+
+See L<Syntax::Feature::Simple::V1> for the first version of the extension set.
+
+=head1 SEE ALSO
+
+=over
+
+=item L<Syntax::Feature::Simple::V1>
+
+Version 1 of the extension set.
+
+=item L<syntax>
+
+The syntax dispatching module.
+
+=back
+
+=head1 BUGS
+
+Please report any bugs or feature requests to bug-syntax-feature-simple@rt.cpan.org or through the web interface at:
+ http://rt.cpan.org/Public/Dist/Display.html?Name=Syntax-Feature-Simple
+
+=head1 AUTHOR
+
+Robert 'phaylon' Sedlacek <rs@474.at>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Robert 'phaylon' Sedlacek.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+

@@ -1,16 +1,15 @@
-use strict;
-use warnings;
+use strictures 1;
 
 # ABSTRACT: Version 1 of bundled syntax enhancements
 
 package Syntax::Feature::Simple::V1;
 
-use Syntax::Feature::Function;
-use Syntax::Feature::Method;
-use Syntax::Feature::Sugar::Callbacks;
+use Syntax::Feature::Function           0.001;
+use Syntax::Feature::Method             0.001;
+use Syntax::Feature::Sugar::Callbacks   0.001;
 
-use Carp         qw( croak );
-use Sub::Install qw( reinstall_sub );
+use Carp                    qw( croak );
+use Sub::Install    0.925   qw( reinstall_sub );
 
 use syntax qw( method );
 

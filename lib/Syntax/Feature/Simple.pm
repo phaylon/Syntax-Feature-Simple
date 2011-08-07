@@ -1,5 +1,4 @@
-use strict;
-use warnings;
+use strictures 1;
 
 # ABSTRACT: DWIM syntax extensions
 

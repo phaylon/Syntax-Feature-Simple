@@ -1,5 +1,5 @@
 use strictures 1;
-use Test::More;
+use Test::More 0.98;
 
 do {
     package MyTest::Plain;
