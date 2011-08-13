@@ -6,7 +6,7 @@ Syntax::Feature::Simple - DWIM syntax extensions
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 DESCRIPTION
 
@@ -14,7 +14,93 @@ This is a more of a syntax extension package than a simple extension by
 itself. It will detect what kind of package it is imported into, and setup
 appropriate syntax extensions depending on the type.
 
-See L<Syntax::Feature::Simple::V1> for the first version of the extension set.
+=head2 Moose Classes and Roles
+
+If a L<Moose> class or role is detected, this extension will setup a C<fun>
+keyword for function declarations, a C<method> keyword, and one keyword
+each for C<before>, C<after> and C<around>.
+
+The modifiers behave exactly like normal method declarations, except for
+C<around> which will provide the original method in a lexical named C<$orig>.
+
+    package MyProject::MooseClassOrRole;
+    use Moose;
+    # or use Moose::Role
+    # or use MooseX::Role::Parameterized,
+    #    but with body inside role { ... };
+    use syntax qw( simple/v2 );
+
+    fun foo ($x) { ... }
+    my $anon_f = fun ($x) { ... };
+
+    method bar ($x) { $self->say($x) }
+    my $anon_m = method ($x) { $self->say($x) };
+
+    before baz ($x) { $self->say($x) }
+    after  baz ($x) { $self->say($x) }
+    around baz ($x) { $self->say($self->$orig($x)) }
+
+    1;
+
+In case of a L<parameterizable role|MooseX::Role::Parameterized> the right
+callback will be called, but compatibility with anonymous method declarations
+will be preserved:
+
+    package MyProject::ParamRole;
+    use MooseX::Role::Parameterized;
+    use syntax qw( simple/v2 );
+
+    parameter method_name => (is => 'ro');
+
+    role {
+        my $name = $_[0]->method_name;
+        method "$name" ($n) { $self->say($n) }
+        my $anon = method ($n) { $self->say($n) };
+    };
+
+    1;
+
+=head2 Plain Packages
+
+By default, if no other kind of package type is detected, C<simple/V1> will
+only setup the function syntax, while C<simple/v2> will setup the function
+and the method extension.
+
+    package MyProject::Util;
+    use strictures 1;
+    use syntax qw( simple/v2 );
+
+    fun foo ($x) { ... }
+    my $anon_f = fun ($x) { ... };
+
+    method bar ($class: $x, $y) { ... }
+    my $anon_m = method ($x) { ... };
+
+    1;
+
+=head1 FUTURE CANDIDATES
+
+=head2 C<v*> (basic set)
+
+=over
+
+=item * C<no indirect>
+
+=item * C<use true>
+
+=item * L<Try::Tiny>
+
+=item * C<role> signatures
+
+=back
+
+=head2 C<x*> (extended set)
+
+=over
+
+=item * L<Smart::Match> if a valid Perl version was declared
+
+=back
 
 =head1 SEE ALSO
 
@@ -24,9 +110,33 @@ See L<Syntax::Feature::Simple::V1> for the first version of the extension set.
 
 Version 1 of the extension set.
 
+=item L<Syntax::Feature::Simple::V2>
+
+Version 2 of the extension set.
+
 =item L<syntax>
 
 The syntax dispatching module.
+
+=item L<Syntax::Feature::Simple>
+
+Contains general information about this extension.
+
+=item L<Syntax::Feature::Method>
+
+Specifics about the C<method> and modifier keywords.
+
+=item L<Syntax::Feature::Function>
+
+Specifics about the C<fun> function keyword.
+
+=item L<Moose>
+
+Post-modern object-orientation.
+
+=item L<MooseX::Role::Parameterized>
+
+Parameterizable roles for L<Moose>.
 
 =back
 
