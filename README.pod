@@ -27,7 +27,7 @@ C<around> which will provide the original method in a lexical named C<$orig>.
     use Moose;
     # or use Moose::Role
     # or use MooseX::Role::Parameterized,
-    #    but with body inside role { ... };
+    #    but with body inside role { ... }
     use syntax qw( simple/v2 );
 
     fun foo ($x) { ... }
@@ -52,17 +52,22 @@ will be preserved:
 
     parameter method_name => (is => 'ro');
 
-    role {
-        my $name = $_[0]->method_name;
+    # defaults to $parameter
+    role ($param) {
+        my $name = $param->method_name;
         method "$name" ($n) { $self->say($n) }
         my $anon = method ($n) { $self->say($n) };
-    };
+    }
 
     1;
 
+As of L<version 2|Syntax::Feature::Simple::V2> you will also get sugar for
+the C<role> body that allows you to specify a signature. By default, the
+parameter object will be available in a variable named C<$parameter>.
+
 =head2 Plain Packages
 
-By default, if no other kind of package type is detected, C<simple/V1> will
+By default, if no other kind of package type is detected, C<simple/v1> will
 only setup the function syntax, while C<simple/v2> will setup the function
 and the method extension.
 
@@ -80,7 +85,7 @@ and the method extension.
 
 =head1 FUTURE CANDIDATES
 
-=head2 C<v*> (basic set)
+=head2 C<simple/v*> (basic set)
 
 =over
 
@@ -90,11 +95,9 @@ and the method extension.
 
 =item * L<Try::Tiny>
 
-=item * C<role> signatures
-
 =back
 
-=head2 C<x*> (extended set)
+=head2 C<simple/x*> (extended set)
 
 =over
 

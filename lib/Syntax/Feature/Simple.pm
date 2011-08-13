@@ -6,7 +6,7 @@ package Syntax::Feature::Simple;
 
 use Syntax::Feature::Function           0.001;
 use Syntax::Feature::Method             0.001;
-use Syntax::Feature::Sugar::Callbacks   0.001;
+use Syntax::Feature::Sugar::Callbacks   0.002;
 
 use Carp                    qw( croak );
 use Sub::Install    0.925   qw( reinstall_sub );
@@ -48,6 +48,22 @@ method _setup_extension ($class: $extension, $target) {
         if $class->can($check_method)
            and not $class->$check_method($target);
     return $class->$setup_method($target);
+}
+
+method _setup_moose_param_role_body_sugar_ext ($class: $target) {
+    Syntax::Feature::Sugar::Callbacks->install(
+        into    => $target,
+        options => {
+            -invocant   => '',
+            -callbacks  => {
+                role    => {
+                    -only_anon  => 1,
+                    -stmt       => 1,
+                    -default    => ['$parameter'],
+                },
+            },
+        },
+    );
 }
 
 method _setup_function_keyword_ext ($class: $target) {
@@ -127,7 +143,7 @@ C<around> which will provide the original method in a lexical named C<$orig>.
     use Moose;
     # or use Moose::Role
     # or use MooseX::Role::Parameterized,
-    #    but with body inside role { ... };
+    #    but with body inside role { ... }
     use syntax qw( simple/v2 );
 
     fun foo ($x) { ... }
@@ -152,13 +168,18 @@ will be preserved:
 
     parameter method_name => (is => 'ro');
 
-    role {
-        my $name = $_[0]->method_name;
+    # defaults to $parameter
+    role ($param) {
+        my $name = $param->method_name;
         method "$name" ($n) { $self->say($n) }
         my $anon = method ($n) { $self->say($n) };
-    };
+    }
 
     1;
+
+As of L<version 2|Syntax::Feature::Simple::V2> you will also get sugar for
+the C<role> body that allows you to specify a signature. By default, the
+parameter object will be available in a variable named C<$parameter>.
 
 =head2 Plain Packages
 
@@ -189,8 +210,6 @@ and the method extension.
 =item * C<use true>
 
 =item * L<Try::Tiny>
-
-=item * C<role> signatures
 
 =back
 

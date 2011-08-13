@@ -1,4 +1,6 @@
 {{$NEXT}}
+    - Added role { } sugar.
+    - The method construct is now always available.
 
 0.001     2011-08-08 00:05:03 Europe/Berlin
     - Initial release.
